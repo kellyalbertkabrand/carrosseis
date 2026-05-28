@@ -9,6 +9,7 @@ os arquivos do projeto.
 | # | Modelo | Pasta | Descrição |
 |---|--------|-------|-----------|
 | 01 | Carrossel 01 - Só texto | [`Carrossel 01 - Só texto/`](./Carrossel%2001%20-%20S%C3%B3%20texto/) | Modelo de carrossel baseado em texto (Mentoria Marca com Essência©). |
+| 01 | Carrossel 01 - Notícias | [`Carrossel 01 - Notícias/`](./Carrossel%2001%20-%20Not%C3%ADcias/) | Carrossel editorial de análise de notícias/polêmicas usando comentários reais como prova. |
 
 > Para adicionar um novo modelo, crie uma pasta `Carrossel NN - <nome>/` e adicione
 > uma linha nesta tabela.
