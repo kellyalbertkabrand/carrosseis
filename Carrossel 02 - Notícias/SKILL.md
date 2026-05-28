@@ -18,7 +18,8 @@ Gera carrosséis editoriais que analisam notícias e polêmicas de marca usando 
 
 - **Conteúdo centralizado verticalmente** no card — nunca preso só no cabeçalho nem só no rodapé. O card é uma coluna flex com `justify-content:center`.
 - **Header da autora** (foto da Kelly + `KELLY ALBERT` + handle) no topo, discreto e idêntico em todos os cards.
-- **Paginação** `N / 10` no canto inferior direito (absolute).
+- **Sem numeração de card** — NÃO usar paginação "N / 10" em canto nenhum.
+- **Imagem com tamanho variável** — o print/imagem pode aparecer **pequeno** (faixa fina, ~70–90px) ou **grande** (ocupando até ~metade do card). Varie conforme a força da prova; não é tamanho fixo.
 - Bloco principal (dado, análise, comentário, frase) ocupa o **centro** do card.
 
 ```css
@@ -49,7 +50,7 @@ Cobre Luminoso: #DCAA7A
 ```
 Playfair Display 400/900 + Italic — títulos, grifado, dados grandes, conceitos
 Montserrat 300-400                — corpo, análise, handle
-Montserrat 500-600 (CAIXA ALTA)   — labels, fonte dos dados, paginação, "KELLY ALBERT"
+Montserrat 500-600 (CAIXA ALTA)   — labels, fonte dos dados, "KELLY ALBERT"
 Mrs Saint Delafield               — assinatura decorativa (opcional)
 ```
 
@@ -60,8 +61,8 @@ Carregar via Google Fonts: `Playfair Display`, `Montserrat`, `Mrs Saint Delafiel
 ### Card 1 — Hook com dado impactante
 - Fundo: Creme #EDE8DD + estampa grid
 - Avatar + nome + handle no topo
-- Dados em destaque: número grande em Playfair 900 ou Plex Serif Thin 100
-- Fonte do dado em Plex Mono 500 caixa alta (ex: "PESQUISA FGV 2026")
+- Dados em destaque: número grande em Playfair Display 900
+- Fonte do dado em Montserrat 600 caixa alta (ex: "PESQUISA FGV 2026")
 - Imagem/print da notícia na parte inferior (border-radius 6px)
 - Grifado em Azul Escuro
 
@@ -75,7 +76,7 @@ Carregar via Google Fonts: `Playfair Display`, `Montserrat`, `Mrs Saint Delafiel
 ### Cards 3-7 — Comentários reais + análise
 - **Alternância Creme ↔ Azul Marinho**
 - Cada card tem:
-  - **Topo**: análise da Kelly (2-3 frases em Plex Serif, 13-14px)
+  - **Topo**: análise da Kelly (2-3 frases em Montserrat 300, 13-14px)
   - **Embaixo**: screenshot do comentário real (border-radius 6px)
 - A análise vem ANTES da imagem (texto primeiro, prova depois)
 - Uma cor de destaque por card:
@@ -110,8 +111,7 @@ Exemplos de análise:
 - Avatar + nome + handle (brancos)
 - Playfair 900: frase conectando o tema ao Livro
 - "Livro Marca com Essência©" em Playfair Itálico + Cobre Luminoso
-- Botão pill "LINK NA BIO" em Plex Mono 500, fundo Azul Marinho
-- "10 / 10"
+- Botão pill "LINK NA BIO" em Montserrat 600, fundo Azul Marinho
 
 ## Como processar screenshots de comentários
 
