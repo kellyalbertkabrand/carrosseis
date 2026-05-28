@@ -14,9 +14,18 @@ Gera carrosséis editoriais que analisam notícias e polêmicas de marca usando 
 - Cards **um embaixo do outro** (flex-direction: column)
 - Fundo da página: `#000`
 
+### Layout padrão (todos os cards)
+
+- **Conteúdo centralizado verticalmente** no card — nunca preso só no cabeçalho nem só no rodapé. O card é uma coluna flex com `justify-content:center`.
+- **Header da autora** (foto da Kelly + `KELLY ALBERT` + handle) no topo, discreto e idêntico em todos os cards.
+- **Paginação** `N / 10` no canto inferior direito (absolute).
+- Bloco principal (dado, análise, comentário, frase) ocupa o **centro** do card.
+
 ```css
 body{background:#000;display:flex;flex-direction:column;gap:20px;padding:20px;align-items:center}
-.card{width:270px;height:338px;border-radius:10px;position:relative;overflow:hidden;flex-shrink:0}
+.card{width:270px;height:338px;border-radius:10px;position:relative;overflow:hidden;flex-shrink:0;
+  display:flex;flex-direction:column;padding:18px}
+.card .content{flex:1;display:flex;flex-direction:column;justify-content:center} /* conteúdo no meio */
 ```
 
 ## Inputs necessários
@@ -35,15 +44,16 @@ Azul Escuro:    #3D6B7E    Canela:         #CC8855
 Cobre Luminoso: #DCAA7A
 ```
 
-## Fontes
+## Fontes (mesmas do Carrossel 01)
 
 ```
-Playfair Display 900/Italic — títulos, grifado, dados grandes
-IBM Plex Serif 300-400      — corpo, análise
-IBM Plex Serif 100          — números grandes
-IBM Plex Mono 500           — labels, fonte dos dados, paginação
-IBM Plex Mono 300           — handle
+Playfair Display 400/900 + Italic — títulos, grifado, dados grandes, conceitos
+Montserrat 300-400                — corpo, análise, handle
+Montserrat 500-600 (CAIXA ALTA)   — labels, fonte dos dados, paginação, "KELLY ALBERT"
+Mrs Saint Delafield               — assinatura decorativa (opcional)
 ```
+
+Carregar via Google Fonts: `Playfair Display`, `Montserrat`, `Mrs Saint Delafield`.
 
 ## Estrutura dos 10 cards
 
@@ -130,18 +140,20 @@ Se não enviar screenshots, simular o comentário em CSS:
 
 ## Regras visuais
 
-1. Avatar + nome + handle em cada card
-2. Sem logo, sem assinatura no rodapé
-3. Alternância Creme ↔ Azul Marinho, CTA em Azul Escuro
-4. Estampa em todo fundo (nunca liso)
-5. Texto da análise ANTES do screenshot (nunca imagem em cima)
-6. Screenshots com border-radius 6px
-7. Uma cor de destaque por card
-8. Grifado: Playfair 900 Itálico + Inicial Maiúscula
-9. Texto alinhado à esquerda
-10. NUNCA label "OPINIÃO FORTE"
-11. NUNCA julgar o comentarista
-12. NUNCA falar mal da marca/designer analisado
+1. **Foto da Kelly** (`assets/kelly-avatar.jpg`, círculo) + `KELLY ALBERT` + handle em cada card
+2. **`KELLY ALBERT` sempre em CAIXA ALTA** (Montserrat 600, letter-spacing)
+3. **Conteúdo centralizado verticalmente** no card (ver Layout padrão)
+4. Sem logo, sem assinatura no rodapé
+5. Alternância Creme ↔ Azul Marinho, CTA em Azul Escuro
+6. **Estampa de fundo suave** — linhas/dots de baixíssima opacidade (~3–5%), nunca marcante; nunca liso
+7. Texto da análise ANTES do screenshot (nunca imagem em cima)
+8. Screenshots com border-radius 6px
+9. Uma cor de destaque por card
+10. Grifado: Playfair 900 Itálico + Inicial Maiúscula
+11. Texto alinhado à esquerda
+12. NUNCA label "OPINIÃO FORTE"
+13. NUNCA julgar o comentarista
+14. NUNCA falar mal da marca/designer analisado
 
 ## NUNCA fazer
 
