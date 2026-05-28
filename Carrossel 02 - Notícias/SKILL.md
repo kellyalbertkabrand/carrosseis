@@ -82,7 +82,7 @@ Carregar via Google Fonts: `Playfair Display`, `Montserrat`, `Mrs Saint Delafiel
 - Uma cor de destaque por card:
   - Creme usa Azul Escuro #3D6B7E
   - Marinho usa Canela #CC8855 ou Cobre Luminoso #DCAA7A
-- Grifado em Playfair Itálico + cor + Inicial Maiúscula
+- **Escrita do corpo herdada do Carrossel 01** (ver "Regras de copy" abaixo): minúsculas, **negrito (Montserrat 700)** na revelação/ponto, *itálico serifado (Playfair)* no conceito-chave — em minúsculas, sem inicial maiúscula.
 - NUNCA julgar o comentarista. SEMPRE extrair o insight estratégico
 
 ### Regras da análise dos comentários
@@ -95,9 +95,17 @@ A análise da Kelly:
 - SEMPRE extrai o insight por trás da emoção
 - Tom: autoridade tranquila, provocação inteligente
 
-Exemplos de análise:
-- "Quando o público usa a palavra 'horrores', não está falando de estética. Está falando de *Traição* a algo que ele considera seu."
-- "'Este povo que aprovou.' O público entendeu: o erro não é da designer. É de quem *Aprovou.* É erro de gestão de marca."
+Exemplos de análise (no estilo de escrita do Carrossel 01 — minúsculas, *itálico* no conceito, **negrito** na revelação):
+- "quando o público usa a palavra 'horrores', não está falando de estética. está falando de *traição* a algo que considera **seu.**"
+- "'este povo que aprovou.' o erro não é da designer. é de quem **aprovou.** é erro de *gestão de marca.*"
+
+### Regras de copy (corpo) — herdadas do Carrossel 01
+
+- Corpo em **minúsculas**; maiúsculas só em nomes próprios e no CTA/anúncio (e em `KELLY ALBERT`).
+- **Negrito (Montserrat 700)** = a revelação / o "ponto" da frase.
+- *Itálico serifado (Playfair Display)* = conceito central (ex.: *essência, verdade, pertencimento, memória*).
+- "©" sempre colado após "Essência" (ex.: "Essência©").
+- Frases curtas, ritmo de manifesto. Sem emojis.
 
 ### Cards 8-9 — Síntese e lição
 - Texto puro, sem imagem
@@ -149,7 +157,7 @@ Se não enviar screenshots, simular o comentário em CSS:
 7. Texto da análise ANTES do screenshot (nunca imagem em cima)
 8. Screenshots com border-radius 6px
 9. Uma cor de destaque por card
-10. Grifado: Playfair 900 Itálico + Inicial Maiúscula
+10. Escrita do corpo no estilo do Carrossel 01: minúsculas; **negrito Montserrat 700** na revelação; *itálico serifado Playfair* no conceito (sem inicial maiúscula)
 11. Texto alinhado à esquerda
 12. NUNCA label "OPINIÃO FORTE"
 13. NUNCA julgar o comentarista
