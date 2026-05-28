@@ -17,7 +17,7 @@ Gera carrosséis editoriais que analisam notícias e polêmicas de marca usando 
 ### Layout padrão (todos os cards)
 
 - **Conteúdo centralizado verticalmente** no card — nunca preso só no cabeçalho nem só no rodapé. O card é uma coluna flex com `justify-content:center`.
-- **Header da autora** (foto da Kelly + `KELLY ALBERT` + handle) no topo, discreto e idêntico em todos os cards.
+- **Header da autora** no topo, idêntico em todos os cards: foto redonda da Kelly (`assets/kelly-avatar.jpg`) + duas linhas ao lado — `KELLY ALBERT` (Montserrat 600, CAIXA ALTA) na primeira e `@kellyalbert.brand` (Montserrat 300) na segunda.
 - **Sem numeração de card** — NÃO usar paginação "N / 10" em canto nenhum.
 - **Imagem com tamanho variável** — o print/imagem pode aparecer **pequeno** (faixa fina, ~70–90px) ou **grande** (ocupando até ~metade do card). Varie conforme a força da prova; não é tamanho fixo.
 - Bloco principal (dado, análise, comentário, frase) ocupa o **centro** do card.
@@ -140,8 +140,8 @@ Se não enviar screenshots, simular o comentário em CSS:
 
 ## Regras visuais
 
-1. **Foto da Kelly** (`assets/kelly-avatar.jpg`, círculo) + `KELLY ALBERT` + handle em cada card
-2. **`KELLY ALBERT` sempre em CAIXA ALTA** (Montserrat 600, letter-spacing)
+1. **Foto da Kelly** (`assets/kelly-avatar.jpg`, círculo) + `KELLY ALBERT` / `@kellyalbert.brand` em cada card
+2. **`KELLY ALBERT` sempre em CAIXA ALTA** (Montserrat 600, letter-spacing); handle `@kellyalbert.brand` em Montserrat 300
 3. **Conteúdo centralizado verticalmente** no card (ver Layout padrão)
 4. Sem logo, sem assinatura no rodapé
 5. Alternância Creme ↔ Azul Marinho, CTA em Azul Escuro
