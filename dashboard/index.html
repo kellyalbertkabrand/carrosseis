@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#1d1b29" />
+  <title>Atividades · Kelly Albert</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-name">KELLY ALBERT</span>
+      <span class="brand-sub">Controle de Atividades</span>
+    </div>
+    <div id="hoje" class="hoje"></div>
+  </header>
+
+  <main>
+    <section class="acoes">
+      <button id="btn-add" class="btn primary">+ Nova atividade</button>
+      <button id="btn-mic" class="btn mic" title="Cadastrar por áudio">🎤 Falar</button>
+      <span id="status" class="status"></span>
+    </section>
+
+    <div id="mic-feedback" class="mic-feedback hidden"></div>
+
+    <section id="board" class="board"></section>
+  </main>
+
+  <!-- Modal de cadastro/edição -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-card">
+      <h2 id="modal-title">Nova atividade</h2>
+      <form id="form">
+        <input type="hidden" id="f-id" />
+        <label>Título
+          <input type="text" id="f-titulo" required placeholder="Ex.: Gravar vídeo do carrossel" />
+        </label>
+        <label>Área
+          <select id="f-area"></select>
+        </label>
+        <div class="row">
+          <label>Hora
+            <input type="time" id="f-hora" />
+          </label>
+          <label>Duração (min)
+            <input type="number" id="f-duracao" min="0" step="15" value="60" />
+          </label>
+        </div>
+        <label>Repetir nos dias
+          <div id="f-dias" class="dias"></div>
+        </label>
+        <label>Ou data única
+          <input type="date" id="f-data" />
+        </label>
+        <div class="row">
+          <label>Prioridade
+            <select id="f-prioridade">
+              <option value="alta">🔴 Alta</option>
+              <option value="media" selected>🟡 Média</option>
+              <option value="baixa">🟢 Baixa</option>
+            </select>
+          </label>
+          <label>Lembrete (min antes)
+            <input type="number" id="f-lembrete" min="0" step="5" value="30" />
+          </label>
+        </div>
+        <div class="modal-actions">
+          <button type="button" id="btn-cancel" class="btn">Cancelar</button>
+          <button type="submit" class="btn primary">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <footer class="rodape">
+    <p>As alterações ficam salvas na nuvem. Os lembretes vão para a <strong>Agenda KA 2023</strong> na sincronização do dia.</p>
+  </footer>
+
+  <script src="./app.js"></script>
+</body>
+</html>
