@@ -7,7 +7,7 @@ agendada me dispara. É também o texto que você cola no campo de instruções 
 ---
 
 ## Quando rodar
-Todo dia às **07:30** (fuso `America/Sao_Paulo`).
+Todo dia às **09:00** (fuso `America/Sao_Paulo`).
 
 ## O que fazer (passo a passo)
 

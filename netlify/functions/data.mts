@@ -10,7 +10,7 @@ const SEED = {
     timezone: "America/Sao_Paulo",
     calendarId: "kellyalbertka@gmail.com",
     calendarName: "Agenda KA 2023 (Kelly Albert)",
-    horario_resumo_diario: "07:30",
+    horario_resumo_diario: "09:00",
     lembrete_padrao_min: 30,
   },
   areas: [

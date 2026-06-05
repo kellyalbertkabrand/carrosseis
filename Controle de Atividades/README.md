@@ -11,7 +11,7 @@ Sistema simples e interativo para **controlar suas atividades por área** e rece
    agenda do dia, te notifica e mantém tudo sincronizado.
 
 ```
-  atividades.json  ──►  Robô diário (07:30)  ──►  Google Agenda  ──►  🔔 celular
+  atividades.json  ──►  Robô diário (09:00)  ──►  Google Agenda  ──►  🔔 celular
    (suas tarefas)         (lê / sincroniza)         (eventos)         (alarme)
 ```
 
