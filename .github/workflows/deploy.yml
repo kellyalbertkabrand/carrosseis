@@ -1,0 +1,28 @@
+name: Publicar dashboard na Netlify
+
+on:
+  workflow_dispatch:
+    inputs:
+      proxy_path:
+        description: "Netlify deploy proxy path (token efêmero)"
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Mascarar token
+        run: echo "::add-mask::${{ inputs.proxy_path }}"
+
+      - name: Deploy
+        env:
+          PROXY: ${{ inputs.proxy_path }}
+        run: npx -y @netlify/mcp@latest --site-id b1c53543-3590-45c4-9061-c1d4383eb39e --proxy-path "$PROXY"
