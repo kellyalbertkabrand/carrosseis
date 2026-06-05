@@ -52,17 +52,8 @@ main { max-width: 820px; margin: 0 auto; padding: 18px 16px 80px; }
 }
 .btn:active { transform: scale(.97); }
 .btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
-.btn.mic { background: #fff; }
-.btn.mic.gravando { background: #e5484d; color: #fff; border-color: #e5484d; animation: pulse 1.2s infinite; }
-@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .55; } }
 
 .status { font-size: 13px; color: var(--muted); }
-
-.mic-feedback {
-  background: #fff; border: 1px dashed var(--accent); border-radius: var(--radius);
-  padding: 12px 14px; margin-bottom: 14px; font-size: 14px; color: var(--muted);
-}
-.mic-feedback.hidden { display: none; }
 
 .board { display: flex; flex-direction: column; gap: 18px; }
 

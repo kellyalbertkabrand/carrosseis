@@ -1,7 +1,6 @@
 "use strict";
 
 const API = "/api/data";
-const TRANSCRIBE = "/api/transcribe";
 
 const DIAS = [
   { code: "MO", label: "Seg" }, { code: "TU", label: "Ter" }, { code: "WE", label: "Qua" },
@@ -274,70 +273,6 @@ function onSubmit(e) {
   save();
 }
 
-/* ---------- Áudio ---------- */
-let mediaRecorder = null;
-let chunks = [];
-
-async function toggleMic() {
-  const btn = el("btn-mic");
-  if (mediaRecorder && mediaRecorder.state === "recording") {
-    mediaRecorder.stop();
-    return;
-  }
-  if (!navigator.mediaDevices || !window.MediaRecorder) {
-    showMic("Seu navegador não suporta gravação de áudio.");
-    return;
-  }
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    chunks = [];
-    mediaRecorder = new MediaRecorder(stream);
-    mediaRecorder.ondataavailable = (ev) => { if (ev.data.size) chunks.push(ev.data); };
-    mediaRecorder.onstop = async () => {
-      stream.getTracks().forEach((t) => t.stop());
-      btn.classList.remove("gravando");
-      btn.textContent = "🎤 Falar";
-      await enviarAudio(new Blob(chunks, { type: mediaRecorder.mimeType || "audio/webm" }));
-    };
-    mediaRecorder.start();
-    btn.classList.add("gravando");
-    btn.textContent = "⏹ Parar";
-    showMic("Gravando… fale a atividade e toque em Parar. Ex.: “gravar vídeo do carrossel quinta de manhã”.");
-  } catch (err) {
-    showMic("Não consegui acessar o microfone. Verifique a permissão.");
-  }
-}
-
-async function enviarAudio(blob) {
-  showMic("Transcrevendo o áudio…");
-  try {
-    const r = await fetch(TRANSCRIBE, {
-      method: "POST",
-      headers: { "content-type": blob.type || "audio/webm" },
-      body: blob,
-    });
-    const data = await r.json();
-    if (!r.ok) {
-      showMic(data.message || "Não foi possível transcrever o áudio agora.");
-      return;
-    }
-    hideMic();
-    const p = data.parsed || {};
-    openModal(null, {
-      titulo: p.titulo || data.transcript,
-      area: p.area,
-      hora: p.hora,
-      recorrencia: p.recorrencia,
-      prioridade: p.prioridade,
-    });
-  } catch (e) {
-    showMic("Erro ao enviar o áudio.");
-  }
-}
-
-function showMic(msg) { const f = el("mic-feedback"); f.textContent = msg; f.classList.remove("hidden"); }
-function hideMic() { el("mic-feedback").classList.add("hidden"); }
-
 /* ---------- util ---------- */
 function escapeHtml(s) {
   return String(s == null ? "" : s).replace(/[&<>"']/g, (c) =>
@@ -346,7 +281,6 @@ function escapeHtml(s) {
 
 /* ---------- init ---------- */
 el("btn-add").addEventListener("click", () => openModal(null));
-el("btn-mic").addEventListener("click", toggleMic);
 el("btn-cancel").addEventListener("click", closeModal);
 el("form").addEventListener("submit", onSubmit);
 el("modal").addEventListener("click", (e) => { if (e.target.id === "modal") closeModal(); });
