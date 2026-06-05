@@ -143,100 +143,118 @@ function metaTexto(t) {
   return parts;
 }
 
-const SECOES = [
-  { tipo: "negocio", titulo: "💼 Profissional" },
-  { tipo: "vida", titulo: "🌱 Pessoal" },
-];
+let view = "afazer"; // "afazer" | "concluidas"
+
+const DIAS_NUM = { SU: 0, MO: 1, TU: 2, WE: 3, TH: 4, FR: 5, SA: 6 };
 
 function areaById(id) {
   return DOC.areas.find((a) => a.id === id) || { nome: "—", colorId: "0" };
 }
 
-// Calcula a próxima data/hora relevante da tarefa, para ordenar por data.
-function sortKey(t) {
-  const [hh, mm] = (t.hora || "23:59").split(":").map(Number);
-  if (t.data) {
-    const d = new Date(t.data + "T00:00:00");
-    d.setHours(hh, mm, 0, 0);
-    return d.getTime();
-  }
+function ymd(d) {
+  return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+}
+
+// Próxima data (Date) em que a tarefa acontece; null se não tem data nem recorrência.
+function proximaData(t) {
+  const [hh, mm] = (t.hora || "00:00").split(":").map(Number);
+  if (t.data) { const d = new Date(t.data + "T00:00:00"); d.setHours(hh, mm, 0, 0); return d; }
   if (t.recorrencia) {
     const m = t.recorrencia.match(/BYDAY=([A-Z,]+)/);
-    const map = { SU: 0, MO: 1, TU: 2, WE: 3, TH: 4, FR: 5, SA: 6 };
-    const days = (m ? m[1].split(",") : []).map((c) => map[c]).filter((x) => x != null);
+    const days = (m ? m[1].split(",") : []).map((c) => DIAS_NUM[c]).filter((x) => x != null);
     const now = new Date();
-    for (let i = 0; i < 7; i++) {
-      const d = new Date(now);
-      d.setDate(now.getDate() + i);
-      d.setHours(hh, mm, 0, 0);
-      if (days.includes(d.getDay()) && d.getTime() >= now.getTime() - 3600000) return d.getTime();
+    for (let i = 0; i < 14; i++) {
+      const d = new Date(now); d.setDate(now.getDate() + i); d.setHours(hh, mm, 0, 0);
+      if (days.includes(d.getDay()) && d.getTime() >= now.getTime() - 3600000) return d;
     }
   }
-  // sem data definida: vai para o fim, mas ainda ordenada por horário
-  return Number.MAX_SAFE_INTEGER - (1440 - (hh * 60 + mm));
+  return null;
 }
 
-function sortTarefas(arr) {
-  return arr.slice().sort((a, b) => {
-    // concluídas descem
-    if ((a.status === "concluida") !== (b.status === "concluida")) {
-      return a.status === "concluida" ? 1 : -1;
-    }
-    return sortKey(a) - sortKey(b);
-  });
+function rotuloDia(chave) {
+  if (chave === "sem-data") return "Sem data definida";
+  const hoje = new Date(); hoje.setHours(0, 0, 0, 0);
+  const d = new Date(chave + "T00:00:00");
+  const diff = Math.round((d - hoje) / 86400000);
+  if (diff === 0) return "Hoje";
+  if (diff === 1) return "Amanhã";
+  const s = d.toLocaleDateString("pt-BR", { weekday: "long", day: "2-digit", month: "long" });
+  return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
-function renderBoard() {
-  const board = el("board");
-  board.innerHTML = "";
-  for (const secao of SECOES) {
-    const areaIds = DOC.areas.filter((a) => a.tipo === secao.tipo).map((a) => a.id);
-    const tarefas = sortTarefas(DOC.tarefas.filter((t) => areaIds.includes(t.area)));
+function renderTabs() {
+  const nConc = DOC.tarefas.filter((t) => t.status === "concluida").length;
+  el("tabs").innerHTML =
+    `<button class="tab ${view === "afazer" ? "on" : ""}" data-view="afazer">A fazer</button>` +
+    `<button class="tab ${view === "concluidas" ? "on" : ""}" data-view="concluidas">✓ Concluídas (${nConc})</button>`;
+  el("tabs").querySelectorAll("[data-view]").forEach((n) =>
+    n.addEventListener("click", () => { view = n.getAttribute("data-view"); renderBoard(); }));
+}
 
-    const group = document.createElement("div");
-    group.className = "area-group";
-    group.innerHTML = `
-      <div class="secao-head">
-        <span class="secao-title">${secao.titulo}</span>
-        <span class="area-count">${tarefas.length}</span>
-      </div>`;
+function linhaTarefa(t, feita) {
+  const area = areaById(t.area);
+  const rec = t.recorrencia ? "🔁" : "";
+  const sub = [t.hora || "", rec].filter(Boolean).join(" · ");
+  return `<div class="item ${feita ? "feito" : ""}">
+    <div class="item-check ${feita ? "on" : ""}" data-toggle="${t.id}"></div>
+    <div class="item-dot" style="background:${corArea(area.colorId)}"></div>
+    <div class="item-body">
+      <div class="item-tit">${escapeHtml(t.titulo)}</div>
+      ${sub ? `<div class="item-sub">${escapeHtml(sub)}</div>` : ""}
+    </div>
+    <button class="icon-btn" data-edit="${t.id}" title="Editar">✏️</button>
+    <button class="icon-btn" data-del="${t.id}" title="Excluir">🗑️</button>
+  </div>`;
+}
 
-    if (tarefas.length === 0) {
-      const e = document.createElement("div");
-      e.className = "empty";
-      e.textContent = "Sem atividades.";
-      group.appendChild(e);
-    }
-
-    for (const t of tarefas) {
-      const area = areaById(t.area);
-      const card = document.createElement("div");
-      card.className = "task" + (t.status === "concluida" ? " concluida" : "");
-      const meta = metaTexto(t).map((p) => `<span class="tag">${escapeHtml(p)}</span>`).join("");
-      card.innerHTML = `
-        <div class="check ${t.status === "concluida" ? "on" : ""}" data-toggle="${t.id}"></div>
-        <div class="task-body">
-          <div class="task-title">${PRIO[t.prioridade] || ""} ${escapeHtml(t.titulo)}</div>
-          <div class="task-meta">
-            <span class="tag area-tag"><span class="area-dot sm" style="background:${corArea(area.colorId)}"></span>${escapeHtml(area.nome)}</span>
-            ${meta}${t.sugestao ? '<span class="tag sug">sugestão</span>' : ""}
-          </div>
-        </div>
-        <div class="task-actions">
-          <button class="icon-btn" data-edit="${t.id}" title="Editar">✏️</button>
-          <button class="icon-btn" data-del="${t.id}" title="Excluir">🗑️</button>
-        </div>`;
-      group.appendChild(card);
-    }
-    board.appendChild(group);
-  }
-
+function ligarEventos(board) {
   board.querySelectorAll("[data-toggle]").forEach((n) =>
     n.addEventListener("click", () => toggle(n.getAttribute("data-toggle"))));
   board.querySelectorAll("[data-edit]").forEach((n) =>
     n.addEventListener("click", () => openModal(n.getAttribute("data-edit"))));
   board.querySelectorAll("[data-del]").forEach((n) =>
     n.addEventListener("click", () => remove(n.getAttribute("data-del"))));
+}
+
+function renderBoard() {
+  renderTabs();
+  const board = el("board");
+  board.innerHTML = "";
+
+  if (view === "concluidas") {
+    const feitas = DOC.tarefas
+      .filter((t) => t.status === "concluida")
+      .sort((a, b) => String(b.concluida_em || "").localeCompare(String(a.concluida_em || "")));
+    if (!feitas.length) { board.innerHTML = '<div class="empty">Nada concluído ainda.</div>'; return; }
+    board.innerHTML = `<div class="grupo">${feitas.map((t) => linhaTarefa(t, true)).join("")}</div>`;
+    ligarEventos(board);
+    return;
+  }
+
+  // A fazer: agrupar por dia
+  const pendentes = DOC.tarefas.filter((t) => t.status !== "concluida");
+  const grupos = {};
+  for (const t of pendentes) {
+    const d = proximaData(t);
+    const chave = d ? ymd(d) : "sem-data";
+    (grupos[chave] = grupos[chave] || []).push(t);
+  }
+  const chaves = Object.keys(grupos).sort((a, b) => {
+    if (a === "sem-data") return 1;
+    if (b === "sem-data") return -1;
+    return a.localeCompare(b);
+  });
+
+  if (!chaves.length) { board.innerHTML = '<div class="empty">Tudo em dia! 🎉</div>'; return; }
+
+  for (const chave of chaves) {
+    const itens = grupos[chave].sort((a, b) => (a.hora || "99:99").localeCompare(b.hora || "99:99"));
+    const grupo = document.createElement("div");
+    grupo.className = "grupo";
+    grupo.innerHTML = `<div class="dia-head">${rotuloDia(chave)}</div>` + itens.map((t) => linhaTarefa(t, false)).join("");
+    board.appendChild(grupo);
+  }
+  ligarEventos(board);
 }
 
 function corArea(colorId) {
@@ -248,7 +266,8 @@ function corArea(colorId) {
 function toggle(id) {
   const t = DOC.tarefas.find((x) => x.id === id);
   if (!t) return;
-  t.status = t.status === "concluida" ? "pendente" : "concluida";
+  if (t.status === "concluida") { t.status = "pendente"; t.concluida_em = null; }
+  else { t.status = "concluida"; t.concluida_em = new Date().toISOString(); }
   renderBoard();
   save();
 }
