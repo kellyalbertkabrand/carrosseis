@@ -176,8 +176,9 @@ function rotuloDia(chave) {
   const hoje = new Date(); hoje.setHours(0, 0, 0, 0);
   const d = new Date(chave + "T00:00:00");
   const diff = Math.round((d - hoje) / 86400000);
-  if (diff === 0) return "Hoje";
-  if (diff === 1) return "Amanhã";
+  const curto = d.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" });
+  if (diff === 0) return `Hoje · ${curto}`;
+  if (diff === 1) return `Amanhã · ${curto}`;
   const s = d.toLocaleDateString("pt-BR", { weekday: "long", day: "2-digit", month: "long" });
   return s.charAt(0).toUpperCase() + s.slice(1);
 }
