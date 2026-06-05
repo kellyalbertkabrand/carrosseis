@@ -8,18 +8,25 @@
 Status: ⬜ pendente · 🔄 em andamento · ✅ concluída
 Prioridade: 🔴 alta · 🟡 média · 🟢 baixa
 
+> 📅 **Calendário de destino:** *"Atividades — Kelly Albert"* (calendário dedicado no
+> Google — ver instrução no README para criar).
+
 ---
 
 ## 💼 Negócio
 
 ### Conteúdo & Carrosséis
-- ⬜ 🔴 **[EXEMPLO] Roteirizar Carrossel da semana** — sex 05/06, 09:30 (60min)
+- ⬜ 🔴 **Criar roteiros** — toda **quinta e sexta**, 09:00 (90min)
+- ⬜ 🔴 **Gravar vídeos** — toda **segunda**, 10:00 (120min)
+- ⬜ 🟡 _[sugestão]_ **Planejar conteúdo da semana** — segunda, 08:30 (30min)
+- ⬜ 🟡 _[sugestão]_ **Editar e postar vídeos** — terça, 10:00 (90min)
+- ⬜ 🟢 _[sugestão]_ **Revisar métricas da semana** — sexta, 16:00 (30min)
 
 ### Mentoria
-- ⬜ 🟡 **[EXEMPLO] Preparar encontro da mentoria** — sex 05/06, 14:00 (90min)
+- _(sem tarefas — me manda quando tiver)_
 
 ### Vendas & Marketing
-- _(sem tarefas)_
+- ⬜ 🟡 _[sugestão]_ **Engajamento e responder comentários** — seg a sex, 17:00 (30min)
 
 ### Financeiro
 - _(sem tarefas)_
@@ -32,9 +39,9 @@ Prioridade: 🔴 alta · 🟡 média · 🟢 baixa
 - _(sem tarefas)_
 
 ### Saúde & Bem-estar
-- ⬜ 🟡 **[EXEMPLO] Pausa / movimento — 30 min** — seg/qua/sex, 18:00 (recorrente)
+- _(sem tarefas)_
 
 ---
 
-> As tarefas marcadas com **[EXEMPLO]** são só para você ver o formato funcionando.
-> Pode apagar e me mandar as suas reais a qualquer momento.
+> As tarefas marcadas com **[sugestão]** são propostas minhas. É só me dizer
+> "confirma a sugestão X" ou "tira a sugestão Y" que eu ajusto.

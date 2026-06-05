@@ -37,6 +37,21 @@ Sistema simples e interativo para **controlar suas atividades por área** e rece
 
 > As áreas são editáveis — é só pedir para criar, renomear ou remover.
 
+## Criar o calendário dedicado (passo manual, 1x só)
+
+As atividades vão para um **calendário separado** ("Atividades — Kelly Albert"),
+para não misturar com sua agenda pessoal. O Google só permite criar calendário pela
+sua conta, então:
+
+1. Abra o **Google Agenda** (no computador é mais fácil).
+2. Menu lateral → **"Outras agendas"** → **+** → **"Criar nova agenda"**.
+3. Nome: **`Atividades — Kelly Albert`** → **Criar agenda**.
+4. Me avise que está criada — eu detecto o ID dela e ligo no sistema (campo
+   `calendarId` do `atividades.json`, hoje em `PENDENTE_CRIAR_CALENDARIO_ATIVIDADES`).
+
+> No celular, ative a sincronização desse novo calendário em
+> *Configurações → sua conta → marque "Atividades — Kelly Albert"*.
+
 ## A peça que falta ligar: o lembrete automático diário
 
 O robô só roda sozinho se houver um **trigger agendado** no Claude Code na web
