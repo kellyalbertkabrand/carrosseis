@@ -1,8 +1,8 @@
 {
   "config": {
     "timezone": "America/Sao_Paulo",
-    "calendarId": "PENDENTE_CRIAR_CALENDARIO_ATIVIDADES",
-    "calendarName": "Atividades — Kelly Albert",
+    "calendarId": "kellyalbertka@gmail.com",
+    "calendarName": "Agenda KA 2023 (Kelly Albert)",
     "horario_resumo_diario": "07:30",
     "lembrete_padrao_min": 30
   },
@@ -28,7 +28,7 @@
       "status": "pendente",
       "lembrete_min": 30,
       "sugestao": false,
-      "calendar_event_id": null
+      "calendar_event_id": "j0qs4g81subv74dirr5en5uhro"
     },
     {
       "id": "t-0002",
@@ -43,7 +43,7 @@
       "status": "pendente",
       "lembrete_min": 30,
       "sugestao": false,
-      "calendar_event_id": null
+      "calendar_event_id": "jufof0pedlth81hr2i9ru5l1bk"
     },
     {
       "id": "t-0003",
