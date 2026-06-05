@@ -1,0 +1,60 @@
+{
+  "config": {
+    "timezone": "America/Sao_Paulo",
+    "calendarId": "kellyalbertka@gmail.com",
+    "horario_resumo_diario": "07:30",
+    "lembrete_padrao_min": 30
+  },
+  "areas": [
+    { "id": "conteudo",   "nome": "Conteúdo & Carrosséis", "tipo": "negocio", "colorId": "7" },
+    { "id": "mentoria",   "nome": "Mentoria",              "tipo": "negocio", "colorId": "10" },
+    { "id": "vendas",     "nome": "Vendas & Marketing",    "tipo": "negocio", "colorId": "6" },
+    { "id": "financeiro", "nome": "Financeiro",            "tipo": "negocio", "colorId": "5" },
+    { "id": "pessoal",    "nome": "Pessoal & Casa",        "tipo": "vida",    "colorId": "2" },
+    { "id": "saude",      "nome": "Saúde & Bem-estar",     "tipo": "vida",    "colorId": "9" }
+  ],
+  "tarefas": [
+    {
+      "id": "t-0001",
+      "area": "conteudo",
+      "titulo": "[EXEMPLO] Roteirizar Carrossel da semana",
+      "descricao": "Escolher tema e escrever os cards seguindo o modelo Carrossel 01/02.",
+      "data": "2026-06-05",
+      "hora": "09:30",
+      "duracao_min": 60,
+      "recorrencia": null,
+      "prioridade": "alta",
+      "status": "pendente",
+      "lembrete_min": 30,
+      "calendar_event_id": null
+    },
+    {
+      "id": "t-0002",
+      "area": "mentoria",
+      "titulo": "[EXEMPLO] Preparar encontro da mentoria",
+      "descricao": "Revisar material e dúvidas das mentoradas.",
+      "data": "2026-06-05",
+      "hora": "14:00",
+      "duracao_min": 90,
+      "recorrencia": null,
+      "prioridade": "media",
+      "status": "pendente",
+      "lembrete_min": 60,
+      "calendar_event_id": null
+    },
+    {
+      "id": "t-0003",
+      "area": "saude",
+      "titulo": "[EXEMPLO] Pausa / movimento — 30 min",
+      "descricao": "Caminhada ou alongamento para fechar o dia.",
+      "data": null,
+      "hora": "18:00",
+      "duracao_min": 30,
+      "recorrencia": "RRULE:FREQ=WEEKLY;BYDAY=MO,WE,FR",
+      "prioridade": "media",
+      "status": "pendente",
+      "lembrete_min": 15,
+      "calendar_event_id": null
+    }
+  ]
+}
