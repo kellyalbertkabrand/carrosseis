@@ -11,7 +11,9 @@ Todo dia às **07:30** (fuso `America/Sao_Paulo`).
 
 ## O que fazer (passo a passo)
 
-1. **Ler** o arquivo `Controle de Atividades/atividades.json`.
+1. **Ler as tarefas do dashboard** (fonte da verdade na nuvem):
+   `GET https://kelly-atividades.netlify.app/api/data` → devolve `{ config, areas, tarefas }`.
+   *(Enquanto o site não estiver publicado, ler `Controle de Atividades/atividades.json`.)*
 2. **Selecionar as tarefas de HOJE**:
    - tarefas com `data` igual à data de hoje, **ou**
    - tarefas com `recorrencia` cujo RRULE cai hoje, **ou**
@@ -23,15 +25,16 @@ Todo dia às **07:30** (fuso `America/Sao_Paulo`).
      - `colorId`: a cor da área
      - `overrideReminders`: popup `lembrete_min` minutos antes
      - `timeZone`: `America/Sao_Paulo`
-   - Gravar o `id` do evento de volta no campo `calendar_event_id` do JSON.
+   - Gravar o `id` do evento de volta no campo `calendar_event_id` da tarefa.
    - Para tarefas já concluídas que ainda têm evento, remover/ignorar.
+   - **Salvar de volta** o documento atualizado no dashboard:
+     `POST https://kelly-atividades.netlify.app/api/data` com o JSON completo no corpo.
 4. **Montar o resumo do dia** agrupado por área, ordenado por horário, destacando
    prioridades 🔴 e tarefas atrasadas.
 5. **Notificar** a Kelly:
    - A própria Google Agenda já dispara os alarmes no celular (canal principal).
    - Enviar também uma notificação push com o resumo do dia.
-6. **Commitar** o `atividades.json` atualizado (com os `calendar_event_id` preenchidos)
-   na branch e dar push.
+6. Confirmar que o dashboard recebeu o `POST` (passo 3) com os `calendar_event_id` preenchidos.
 
 ## Regras
 - Nunca duplicar eventos: se a tarefa já tem `calendar_event_id`, não recriar.
@@ -44,6 +47,7 @@ Todo dia às **07:30** (fuso `America/Sao_Paulo`).
 ## Texto para colar no trigger agendado (web)
 
 > Leia `Controle de Atividades/rotina-diaria.md` e execute a rotina diária:
-> selecione as atividades de hoje no `atividades.json`, sincronize-as como eventos
-> na Google Agenda (`kellyalbertka@gmail.com`) com lembrete, me mande o resumo do dia
-> por push, e dê commit/push do JSON atualizado.
+> busque as atividades em `https://kelly-atividades.netlify.app/api/data`, selecione as
+> de hoje, sincronize-as como eventos na Google Agenda (`kellyalbertka@gmail.com`) com
+> lembrete, salve o documento atualizado de volta via `POST` na mesma URL, e me mande
+> o resumo do dia por push.

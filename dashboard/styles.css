@@ -112,5 +112,17 @@ form input, form select {
 .dia-btn.on { background: var(--accent); color: #fff; border-color: var(--accent); }
 .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 8px; }
 
+textarea {
+  width: 100%; margin-top: 6px; padding: 12px; border: 1px solid var(--line);
+  border-radius: 12px; font-size: 16px; font-family: inherit; resize: vertical; color: var(--ink);
+}
+.dica { font-size: 13px; color: var(--muted); margin: 0 0 10px; line-height: 1.55; }
+.bloco-preview { margin-top: 16px; }
+.prev-titulo { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+.prev-item { display: flex; align-items: flex-start; gap: 9px; padding: 9px 0; border-top: 1px solid var(--line); }
+.prev-body { flex: 1; min-width: 0; }
+.prev-tit { font-weight: 600; font-size: 14px; }
+.prev-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
 .rodape { text-align: center; color: var(--muted); font-size: 12px; padding: 0 20px 30px; }
 .hidden { display: none; }

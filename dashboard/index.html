@@ -19,6 +19,7 @@
   <main>
     <section class="acoes">
       <button id="btn-add" class="btn primary">+ Nova atividade</button>
+      <button id="btn-bloco" class="btn">📋 Colar em bloco</button>
       <span id="status" class="status"></span>
     </section>
 
@@ -68,6 +69,25 @@
           <button type="submit" class="btn primary">Salvar</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- Modal de bloco -->
+  <div id="modal-bloco" class="modal hidden">
+    <div class="modal-card">
+      <h2>Colar atividades em bloco</h2>
+      <p class="dica">Cole várias atividades, <strong>uma por linha</strong>. A ferramenta separa e organiza por data/hora.<br>
+        Ex.: <em>Gravar vídeos segunda 10h</em> · <em>Pagar boletos dia 10</em> · <em>Responder comentários todo dia 17h</em></p>
+      <textarea id="bloco-texto" rows="7" placeholder="Uma atividade por linha…"></textarea>
+      <div class="modal-actions">
+        <button type="button" id="bloco-cancel" class="btn">Cancelar</button>
+        <button type="button" id="bloco-processar" class="btn primary">Processar</button>
+      </div>
+      <div id="bloco-preview" class="bloco-preview hidden"></div>
+      <div id="bloco-confirm-actions" class="modal-actions hidden">
+        <button type="button" id="bloco-voltar" class="btn">Editar texto</button>
+        <button type="button" id="bloco-add" class="btn primary">Adicionar todas</button>
+      </div>
     </div>
   </div>
 
