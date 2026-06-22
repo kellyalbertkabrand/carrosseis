@@ -205,7 +205,10 @@ function linhaTarefa(t, feita) {
     </div>
     <button class="icon-btn" data-edit="${t.id}" title="Editar">✏️</button>
     <button class="icon-btn" data-del="${t.id}" title="Excluir">🗑️</button>
-    ${feita ? "" : `<div class="drag-handle" title="Arraste para reordenar">↕</div>`}
+    ${feita ? "" : `<div class="move-btns">
+      <button class="move-btn" data-up="${t.id}" title="Subir" aria-label="Subir">▲</button>
+      <button class="move-btn" data-down="${t.id}" title="Descer" aria-label="Descer">▼</button>
+    </div>`}
   </div>`;
 }
 
@@ -216,46 +219,38 @@ function ligarEventos(board) {
     n.addEventListener("click", () => openModal(n.getAttribute("data-edit"))));
   board.querySelectorAll("[data-del]").forEach((n) =>
     n.addEventListener("click", () => remove(n.getAttribute("data-del"))));
+  board.querySelectorAll("[data-up]").forEach((n) =>
+    n.addEventListener("click", () => moveItem(n.getAttribute("data-up"), "up")));
+  board.querySelectorAll("[data-down]").forEach((n) =>
+    n.addEventListener("click", () => moveItem(n.getAttribute("data-down"), "down")));
 }
 
-// Arrastar para reordenar (pointer events no document: robusto no toque do iPhone)
-function enableDragSort(grupoEl) {
-  grupoEl.querySelectorAll(".drag-handle").forEach((handle) => {
-    handle.addEventListener("pointerdown", (e) => {
-      e.preventDefault();
-      const item = handle.closest(".item");
-      if (!item) return;
-      item.classList.add("dragging");
-
-      const onMove = (ev) => {
-        if (ev.cancelable) ev.preventDefault();
-        const y = ev.clientY;
-        const outros = [...grupoEl.querySelectorAll(".item:not(.dragging)")];
-        let alvo = null;
-        for (const s of outros) {
-          const r = s.getBoundingClientRect();
-          if (y < r.top + r.height / 2) { alvo = s; break; }
-        }
-        if (alvo) grupoEl.insertBefore(item, alvo);
-        else grupoEl.appendChild(item);
-      };
-      const onUp = () => {
-        item.classList.remove("dragging");
-        document.removeEventListener("pointermove", onMove);
-        document.removeEventListener("pointerup", onUp);
-        document.removeEventListener("pointercancel", onUp);
-        commitOrder(grupoEl);
-      };
-      document.addEventListener("pointermove", onMove, { passive: false });
-      document.addEventListener("pointerup", onUp);
-      document.addEventListener("pointercancel", onUp);
-    });
-  });
+// Ordenação dos itens dentro de um grupo (mesmo dia)
+function ordenarItens(a, b) {
+  const ao = a.ordem, bo = b.ordem;
+  if (ao != null && bo != null) return ao - bo;
+  if (ao != null) return -1;
+  if (bo != null) return 1;
+  return (a.hora || "99:99").localeCompare(b.hora || "99:99");
 }
 
-function commitOrder(grupoEl) {
-  const ids = [...grupoEl.querySelectorAll(".item")].map((el) => el.dataset.id);
-  ids.forEach((id, i) => { const t = DOC.tarefas.find((x) => x.id === id); if (t) t.ordem = i; });
+// Subir/descer um item dentro do seu grupo (toque: robusto no iPhone)
+function moveItem(id, dir) {
+  const t = DOC.tarefas.find((x) => x.id === id);
+  if (!t) return;
+  const d = proximaData(t);
+  const chave = d ? ymd(d) : "sem-data";
+  // monta o mesmo grupo exibido no render
+  const grupo = DOC.tarefas
+    .filter((x) => x.status !== "concluida")
+    .filter((x) => { const dd = proximaData(x); return (dd ? ymd(dd) : "sem-data") === chave; })
+    .sort(ordenarItens);
+  const i = grupo.findIndex((x) => x.id === id);
+  const j = dir === "up" ? i - 1 : i + 1;
+  if (i < 0 || j < 0 || j >= grupo.length) return; // já está na ponta
+  grupo.splice(j, 0, grupo.splice(i, 1)[0]); // troca de posição
+  grupo.forEach((x, k) => { x.ordem = k; });  // grava ordem sequencial
+  renderBoard();
   save();
 }
 
@@ -291,20 +286,13 @@ function renderBoard() {
   if (!chaves.length) { board.innerHTML = '<div class="empty">Tudo em dia! 🎉</div>'; return; }
 
   for (const chave of chaves) {
-    const itens = grupos[chave].sort((a, b) => {
-      const ao = a.ordem, bo = b.ordem;
-      if (ao != null && bo != null) return ao - bo;
-      if (ao != null) return -1;
-      if (bo != null) return 1;
-      return (a.hora || "99:99").localeCompare(b.hora || "99:99");
-    });
+    const itens = grupos[chave].sort(ordenarItens);
     const grupo = document.createElement("div");
     grupo.className = "grupo";
     grupo.innerHTML = `<div class="dia-head">${rotuloDia(chave)}</div>` + itens.map((t) => linhaTarefa(t, false)).join("");
     board.appendChild(grupo);
   }
   ligarEventos(board);
-  board.querySelectorAll(".grupo").forEach(enableDragSort);
 }
 
 function corArea(colorId) {
