@@ -196,7 +196,7 @@ function linhaTarefa(t, feita) {
   const area = areaById(t.area);
   const rec = t.recorrencia ? "🔁" : "";
   const sub = [t.hora || "", rec].filter(Boolean).join(" · ");
-  return `<div class="item ${feita ? "feito" : ""}">
+  return `<div class="item ${feita ? "feito" : ""}" data-id="${t.id}">
     <div class="item-check ${feita ? "on" : ""}" data-toggle="${t.id}"></div>
     <div class="item-dot" style="background:${corArea(area.colorId)}"></div>
     <div class="item-body">
@@ -205,6 +205,7 @@ function linhaTarefa(t, feita) {
     </div>
     <button class="icon-btn" data-edit="${t.id}" title="Editar">✏️</button>
     <button class="icon-btn" data-del="${t.id}" title="Excluir">🗑️</button>
+    ${feita ? "" : `<div class="drag-handle" title="Arraste para reordenar">↕</div>`}
   </div>`;
 }
 
@@ -215,6 +216,48 @@ function ligarEventos(board) {
     n.addEventListener("click", () => openModal(n.getAttribute("data-edit"))));
   board.querySelectorAll("[data-del]").forEach((n) =>
     n.addEventListener("click", () => remove(n.getAttribute("data-del"))));
+}
+
+// Arrastar para reordenar (pointer events: funciona no toque e no mouse)
+function enableDragSort(grupoEl) {
+  grupoEl.querySelectorAll(".drag-handle").forEach((handle) => {
+    handle.addEventListener("pointerdown", (e) => {
+      e.preventDefault();
+      const item = handle.closest(".item");
+      if (!item) return;
+      item.classList.add("dragging");
+      try { handle.setPointerCapture(e.pointerId); } catch (_) {}
+
+      const onMove = (ev) => {
+        const y = ev.clientY;
+        const outros = [...grupoEl.querySelectorAll(".item:not(.dragging)")];
+        let alvo = null;
+        for (const s of outros) {
+          const r = s.getBoundingClientRect();
+          if (y < r.top + r.height / 2) { alvo = s; break; }
+        }
+        if (alvo) grupoEl.insertBefore(item, alvo);
+        else grupoEl.appendChild(item);
+      };
+      const onUp = () => {
+        item.classList.remove("dragging");
+        try { handle.releasePointerCapture(e.pointerId); } catch (_) {}
+        handle.removeEventListener("pointermove", onMove);
+        handle.removeEventListener("pointerup", onUp);
+        handle.removeEventListener("pointercancel", onUp);
+        commitOrder(grupoEl);
+      };
+      handle.addEventListener("pointermove", onMove);
+      handle.addEventListener("pointerup", onUp);
+      handle.addEventListener("pointercancel", onUp);
+    });
+  });
+}
+
+function commitOrder(grupoEl) {
+  const ids = [...grupoEl.querySelectorAll(".item")].map((el) => el.dataset.id);
+  ids.forEach((id, i) => { const t = DOC.tarefas.find((x) => x.id === id); if (t) t.ordem = i; });
+  save();
 }
 
 function renderBoard() {
@@ -249,13 +292,20 @@ function renderBoard() {
   if (!chaves.length) { board.innerHTML = '<div class="empty">Tudo em dia! 🎉</div>'; return; }
 
   for (const chave of chaves) {
-    const itens = grupos[chave].sort((a, b) => (a.hora || "99:99").localeCompare(b.hora || "99:99"));
+    const itens = grupos[chave].sort((a, b) => {
+      const ao = a.ordem, bo = b.ordem;
+      if (ao != null && bo != null) return ao - bo;
+      if (ao != null) return -1;
+      if (bo != null) return 1;
+      return (a.hora || "99:99").localeCompare(b.hora || "99:99");
+    });
     const grupo = document.createElement("div");
     grupo.className = "grupo";
     grupo.innerHTML = `<div class="dia-head">${rotuloDia(chave)}</div>` + itens.map((t) => linhaTarefa(t, false)).join("");
     board.appendChild(grupo);
   }
   ligarEventos(board);
+  board.querySelectorAll(".grupo").forEach(enableDragSort);
 }
 
 function corArea(colorId) {
