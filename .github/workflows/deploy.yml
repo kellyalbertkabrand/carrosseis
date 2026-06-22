@@ -1,0 +1,25 @@
+name: Publicar dashboard na Netlify
+
+on:
+  push:
+    branches:
+      - claude/activity-control-notifications-F2SrW
+    paths:
+      - ".github/workflows/deploy.yml"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Deploy
+        env:
+          PROXY: "https://netlify-mcp.netlify.app/proxy/eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..CUhzTkC3Epiaw_RA.2KR4l3hBpl4sdEPPWt4_tH0tSo0ykX6iuOe7rCiXZqIw8rnwQItwkooaR4xRiU1AYZyWNQZHQFw7hUqkIctzKq4JJKUPXdPL4fTH_tNFPZ-7TTeKl_PRbsynvsrXWctLHKcXCyk169CIYIHQYn5zncYwF4dVP0KiUea5J5sgQTz3s8ByuU4E9iOJdMbrou3EiBZE_0ToYQM6eiPt-AfwcuTPw6pGxwVLqY0sK09d3BJzX7K3SUIRjTsWtg_3cEyai2WKbA1k1h6y1rF10WDzHS1JQfS7PLOWxlL3bZCMJfmz5bYtjlAlTbUxxczmE5_e5E3MvjbNdT8sf-QM88RoPrFYl7FvK_69iDSU81tvtmcQG2nXwfAmzWjzZ2GSwEVosYOt9XkS.CkDDpAqBbqzv8_7L-6AVtA"
+        run: npx -y @netlify/mcp@latest --site-id b1c53543-3590-45c4-9061-c1d4383eb39e --proxy-path "$PROXY"

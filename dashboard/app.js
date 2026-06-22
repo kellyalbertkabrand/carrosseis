@@ -218,7 +218,7 @@ function ligarEventos(board) {
     n.addEventListener("click", () => remove(n.getAttribute("data-del"))));
 }
 
-// Arrastar para reordenar (pointer events: funciona no toque e no mouse)
+// Arrastar para reordenar (pointer events no document: robusto no toque do iPhone)
 function enableDragSort(grupoEl) {
   grupoEl.querySelectorAll(".drag-handle").forEach((handle) => {
     handle.addEventListener("pointerdown", (e) => {
@@ -226,9 +226,9 @@ function enableDragSort(grupoEl) {
       const item = handle.closest(".item");
       if (!item) return;
       item.classList.add("dragging");
-      try { handle.setPointerCapture(e.pointerId); } catch (_) {}
 
       const onMove = (ev) => {
+        if (ev.cancelable) ev.preventDefault();
         const y = ev.clientY;
         const outros = [...grupoEl.querySelectorAll(".item:not(.dragging)")];
         let alvo = null;
@@ -241,15 +241,14 @@ function enableDragSort(grupoEl) {
       };
       const onUp = () => {
         item.classList.remove("dragging");
-        try { handle.releasePointerCapture(e.pointerId); } catch (_) {}
-        handle.removeEventListener("pointermove", onMove);
-        handle.removeEventListener("pointerup", onUp);
-        handle.removeEventListener("pointercancel", onUp);
+        document.removeEventListener("pointermove", onMove);
+        document.removeEventListener("pointerup", onUp);
+        document.removeEventListener("pointercancel", onUp);
         commitOrder(grupoEl);
       };
-      handle.addEventListener("pointermove", onMove);
-      handle.addEventListener("pointerup", onUp);
-      handle.addEventListener("pointercancel", onUp);
+      document.addEventListener("pointermove", onMove, { passive: false });
+      document.addEventListener("pointerup", onUp);
+      document.addEventListener("pointercancel", onUp);
     });
   });
 }
