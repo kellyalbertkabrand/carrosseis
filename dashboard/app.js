@@ -205,10 +205,7 @@ function linhaTarefa(t, feita) {
     </div>
     <button class="icon-btn" data-edit="${t.id}" title="Editar">✏️</button>
     <button class="icon-btn" data-del="${t.id}" title="Excluir">🗑️</button>
-    ${feita ? "" : `<div class="move-btns">
-      <button class="move-btn" data-up="${t.id}" title="Subir" aria-label="Subir">▲</button>
-      <button class="move-btn" data-down="${t.id}" title="Descer" aria-label="Descer">▼</button>
-    </div>`}
+    ${feita ? "" : `<div class="grip" title="Segure e arraste para mover">⠿</div>`}
   </div>`;
 }
 
@@ -219,10 +216,6 @@ function ligarEventos(board) {
     n.addEventListener("click", () => openModal(n.getAttribute("data-edit"))));
   board.querySelectorAll("[data-del]").forEach((n) =>
     n.addEventListener("click", () => remove(n.getAttribute("data-del"))));
-  board.querySelectorAll("[data-up]").forEach((n) =>
-    n.addEventListener("click", () => moveItem(n.getAttribute("data-up"), "up")));
-  board.querySelectorAll("[data-down]").forEach((n) =>
-    n.addEventListener("click", () => moveItem(n.getAttribute("data-down"), "down")));
 }
 
 // Ordenação dos itens dentro de um grupo (mesmo dia)
@@ -234,23 +227,66 @@ function ordenarItens(a, b) {
   return (a.hora || "99:99").localeCompare(b.hora || "99:99");
 }
 
-// Subir/descer um item dentro do seu grupo (toque: robusto no iPhone)
-function moveItem(id, dir) {
-  const t = DOC.tarefas.find((x) => x.id === id);
-  if (!t) return;
-  const d = proximaData(t);
-  const chave = d ? ymd(d) : "sem-data";
-  // monta o mesmo grupo exibido no render
-  const grupo = DOC.tarefas
-    .filter((x) => x.status !== "concluida")
-    .filter((x) => { const dd = proximaData(x); return (dd ? ymd(dd) : "sem-data") === chave; })
-    .sort(ordenarItens);
-  const i = grupo.findIndex((x) => x.id === id);
-  const j = dir === "up" ? i - 1 : i + 1;
-  if (i < 0 || j < 0 || j >= grupo.length) return; // já está na ponta
-  grupo.splice(j, 0, grupo.splice(i, 1)[0]); // troca de posição
-  grupo.forEach((x, k) => { x.ordem = k; });  // grava ordem sequencial
-  renderBoard();
+// Arrastar para reordenar: segura a atividade (toque longo) e arrasta.
+// Padrão robusto no iPhone — trava a rolagem só depois do "pega" pra não confundir com scroll.
+function enableDragSort(grupoEl) {
+  let dragItem = null, dragging = false, longPress = null, startY = 0, lastY = 0;
+
+  const reordenar = (y) => {
+    const outros = [...grupoEl.querySelectorAll(".item:not(.dragging)")];
+    let alvo = null;
+    for (const s of outros) {
+      const r = s.getBoundingClientRect();
+      if (y < r.top + r.height / 2) { alvo = s; break; }
+    }
+    if (alvo) grupoEl.insertBefore(dragItem, alvo);
+    else grupoEl.appendChild(dragItem);
+  };
+
+  const cancelLongPress = () => { if (longPress) { clearTimeout(longPress); longPress = null; } };
+
+  const finalizar = () => {
+    cancelLongPress();
+    if (dragging && dragItem) {
+      dragItem.classList.remove("dragging");
+      commitOrder(grupoEl);
+    }
+    dragging = false; dragItem = null;
+  };
+
+  grupoEl.querySelectorAll(".item").forEach((item) => {
+    item.addEventListener("touchstart", (e) => {
+      // deixa os botões (concluir/editar/excluir) funcionarem normalmente
+      if (e.target.closest("button") || e.target.closest(".item-check")) return;
+      const ty = e.touches[0].clientY;
+      startY = ty; lastY = ty;
+      longPress = setTimeout(() => {
+        longPress = null;
+        dragging = true; dragItem = item;
+        item.classList.add("dragging");
+        if (navigator.vibrate) navigator.vibrate(12); // feedbackzinho de "pegou"
+      }, 220);
+    }, { passive: true });
+
+    item.addEventListener("touchmove", (e) => {
+      const y = e.touches[0].clientY; lastY = y;
+      if (!dragging) {
+        // mexeu antes de "pegar" => é rolagem, cancela o toque longo
+        if (Math.abs(y - startY) > 8) cancelLongPress();
+        return;
+      }
+      e.preventDefault(); // já pegou: trava a rolagem enquanto arrasta
+      reordenar(y);
+    }, { passive: false });
+
+    item.addEventListener("touchend", finalizar);
+    item.addEventListener("touchcancel", finalizar);
+  });
+}
+
+function commitOrder(grupoEl) {
+  const ids = [...grupoEl.querySelectorAll(".item")].map((el) => el.dataset.id);
+  ids.forEach((id, i) => { const t = DOC.tarefas.find((x) => x.id === id); if (t) t.ordem = i; });
   save();
 }
 
@@ -293,6 +329,7 @@ function renderBoard() {
     board.appendChild(grupo);
   }
   ligarEventos(board);
+  board.querySelectorAll(".grupo").forEach(enableDragSort);
 }
 
 function corArea(colorId) {

@@ -88,14 +88,16 @@ main { max-width: 820px; margin: 0 auto; padding: 18px 16px 80px; }
 .item-sub { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
 .item.feito .item-tit { text-decoration: line-through; color: #2e9e5b; }
 .item.feito .item-dot { opacity: .4; }
-.move-btns { flex: 0 0 auto; display: flex; flex-direction: column; gap: 2px; margin-left: 2px; }
-.move-btn {
-  border: 1px solid var(--line); background: #fff; color: #8a7f70;
-  width: 34px; height: 26px; border-radius: 8px; font-size: 13px; line-height: 1;
-  cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent;
-  display: flex; align-items: center; justify-content: center; padding: 0;
+.grip {
+  flex: 0 0 auto; color: #c9c1b4; font-size: 20px; line-height: 1;
+  padding: 10px 4px 10px 8px; cursor: grab;
+  user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent;
 }
-.move-btn:active { background: #efe9df; }
+.item.dragging {
+  opacity: .92; background: #f3eee6; border-radius: 12px; border-bottom-color: transparent;
+  box-shadow: 0 6px 18px rgba(0,0,0,.18); transform: scale(1.02);
+}
+.item.dragging .grip { cursor: grabbing; color: #8a7f70; }
 
 .area-group { background: transparent; }
 .secao-head {
